@@ -12,14 +12,16 @@ public class EmployeeDAO {
             Persistence.createEntityManagerFactory("hsf302FU");
 
 
-    // ---------- UPDATE (TODO 0.6) ----------
-    public Employee update(Employee e) {
+    // ---------- DELETE (TODO 0.7) ----------
+    public void delete(Long id) {
         EntityManager em = emf.createEntityManager();
         try {
             em.getTransaction().begin();
-            Employee merged = em.merge(e); // merge() TRẢ VỀ một entity MANAGED khác
+            Employee e = em.find(Employee.class, id); // e đang MANAGED
+            if (e != null) {
+                em.remove(e); // -> e chuyển sang REMOVED, bị xóa thật sự khi commit
+            }
             em.getTransaction().commit();
-            return merged;
         } catch (RuntimeException ex) {
             if (em.getTransaction().isActive()) em.getTransaction().rollback();
             throw ex;
@@ -27,6 +29,4 @@ public class EmployeeDAO {
             em.close();
         }
     }
-
-
 }
