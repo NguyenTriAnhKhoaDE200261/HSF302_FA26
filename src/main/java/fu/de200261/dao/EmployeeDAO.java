@@ -12,21 +12,27 @@ public class EmployeeDAO {
             Persistence.createEntityManagerFactory("hsf302FU");
 
 
-
-    // ---------- READ (TODO 0.4) ----------
-    public Employee findById(Long id) {
+    // ---------- READ có điều kiện (TODO 0.5) ----------
+    public Employee findByEmail(String email) {
         EntityManager em = emf.createEntityManager();
         try {
-            return em.find(Employee.class, id); // trả về null nếu không tồn tại
+            List<Employee> result = em.createQuery(
+                            "SELECT e FROM Employee e WHERE e.email = :email", Employee.class)
+                    .setParameter("email", email)
+                    .getResultList();
+            return result.isEmpty() ? null : result.get(0);
         } finally {
             em.close();
         }
     }
 
-    public List<Employee> findAll() {
+    public List<Employee> findBySalaryGreaterThanAndActive(BigDecimal minSalary) {
         EntityManager em = emf.createEntityManager();
         try {
-            return em.createQuery("SELECT e FROM Employee e", Employee.class)
+            return em.createQuery(
+                            "SELECT e FROM Employee e WHERE e.salary > :minSalary AND e.active = true",
+                            Employee.class)
+                    .setParameter("minSalary", minSalary)
                     .getResultList();
         } finally {
             em.close();
