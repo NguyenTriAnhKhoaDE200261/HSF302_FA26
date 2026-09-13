@@ -3,49 +3,55 @@ package fu.de200261;
 import fu.de200261.dao.EmployeeDAO;
 import fu.de200261.pojo.Employee;
 import fu.de200261.pojo.Gender;
-import jakarta.persistence.PersistenceException;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
         EmployeeDAO dao = new EmployeeDAO();
 
-        // 1. Tạo và lưu nhân viên thứ nhất với một email cố định
-        Employee emp1 = new Employee();
-        emp1.setFullName("User One");
-        emp1.setEmail("test.unique@fpt.edu.vn");
-        emp1.setSalary(new BigDecimal("10000000"));
-        emp1.setGender(Gender.MALE);
-        emp1.setHireDate(LocalDate.of(2023, 1, 1));
-        emp1.setActive(true);
+        // 1. Trạng thái: New / Transient
+        // Giải thích: Đối tượng vừa được khởi tạo bằng từ khóa 'new', chưa được liên kết
+        // với EntityManager và chưa tồn tại trong cơ sở dữ liệu.
+        Employee emp = new Employee();
+        emp.setFullName("Nguyen Van Lifecycle");
+        emp.setEmail("lifecycle.test@fpt.edu.vn");
+        emp.setSalary(new BigDecimal("16000000"));
+        emp.setGender(Gender.MALE);
+        emp.setHireDate(LocalDate.of(2023, 6, 1));
+        emp.setActive(true);
 
-        dao.save(emp1);
-        System.out.println("-> Đã lưu thành công nhân viên thứ nhất với ID: " + emp1.getId());
+        // 2. Chuyển sang trạng thái: Managed -> Detached
+        // Giải thích: Khi gọi dao.save(emp), bên trong method EntityManager gọi em.persist(emp),
+        // giúp entity chuyển sang trạng thái MANAGED và được INSERT vào DB khi commit transaction.
+        // Sau khi method save() kết thúc và đóng EntityManager, entity chuyển sang trạng thái DETACHED.
+        dao.save(emp);
+        System.out.println("-> [Lifecycle] Entity đã được lưu, ID sinh ra: " + emp.getId() + " (Hiện ở trạng thái Detached)");
 
-        // 2. Tạo nhân viên thứ hai CÓ CÙNG EMAIL với nhân viên thứ nhất
-        Employee emp2 = new Employee();
-        emp2.setFullName("User Two (Duplicate)");
-        emp2.setEmail("test.unique@fpt.edu.vn"); // TRÙNG EMAIL CỐ Ý
-        emp2.setSalary(new BigDecimal("12000000"));
-        emp2.setGender(Gender.FEMALE);
-        emp2.setHireDate(LocalDate.of(2023, 2, 1));
-        emp2.setActive(true);
+        // 3. Đọc dữ liệu (Read)
+        Employee found = dao.findById(emp.getId());
+        System.out.println("-> [Lifecycle] Tìm thấy nhân viên: " + found.getFullName());
 
-        // 3. Thử lưu và bắt lỗi vi phạm Unique Constraint
-        try {
-            dao.save(emp2);
-            System.out.println("-> CẢNH BÁO: Lẽ ra phải báo lỗi trùng email nhưng lại lưu thành công!");
-        } catch (RuntimeException ex) {
-            System.out.println("-> THÀNH CÔNG: Đã bắt được ngoại lệ vi phạm Unique Constraint đúng như yêu cầu TODO 0.9!");
-            System.out.println("-> Chi tiết lỗi: " + (ex.getCause() != null ? ex.getCause().getMessage() : ex.getMessage()));
-        } finally {
-            // Dọn dẹp: Xóa nhân viên mẫu đầu tiên để dữ liệu sạch sẽ
-            if (emp1.getId() != null) {
-                dao.delete(emp1.getId());
-                System.out.println("-> Đã dọn dẹp dữ liệu test (xóa emp1 khỏi DB).");
-            }
-        }
+        List<Employee> allEmployees = dao.findAll();
+        System.out.println("-> [Lifecycle] Tổng số nhân viên trong DB: " + allEmployees.size());
+
+        // 4. Trạng thái: Detached -> Managed (qua merge) trong UPDATE
+        // Giải thích: Đối tượng 'found' đang ở trạng thái Detached. Khi ta thay đổi dữ liệu
+        // và gọi dao.update(found) (bên trong gọi em.merge()), Hibernate sẽ đồng bộ lại
+        // và trả về một instance mới ở trạng thái Managed trong transaction đó để thực hiện lệnh UPDATE.
+        found.setSalary(new BigDecimal("22000000"));
+        dao.update(found);
+        Employee reChecked = dao.findById(emp.getId());
+        System.out.println("-> [Lifecycle] Lương sau khi update (Managed sync với DB): " + reChecked.getSalary());
+
+        // 5. Chuyển sang trạng thái: Removed trong DELETE
+        // Giải thích: Khi gọi dao.delete(), bên trong method thực hiện find() để đưa entity
+        // về trạng thái Managed, sau đó gọi em.remove(e) để chuyển entity sang trạng thái REMOVED
+        // trong transaction, và dữ liệu sẽ bị xóa thật sự khỏi DB khi transaction commit().
+        dao.delete(emp.getId());
+        Employee afterDelete = dao.findById(emp.getId());
+        System.out.println("-> [Lifecycle] Tìm lại sau khi xóa (Removed -> Null): " + (afterDelete == null ? "Thành công (Null)" : "Vẫn còn"));
     }
 }
