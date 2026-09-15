@@ -29,7 +29,12 @@ public class Employee {
     private boolean active; // kiểu nguyên thủy, không phải Boolean object
 
     // TODO 2.2 sẽ thêm phần ManyToOne ở đây
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "department_id", nullable = false)
+    private Department department;
 
+    public Department getDepartment() { return department; }
+    public void setDepartment(Department department) { this.department = department; }
     public Employee() {}
 
     public Employee(String email, String fullName, Gender gender, BigDecimal salary, LocalDate hireDate) {
