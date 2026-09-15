@@ -19,7 +19,10 @@ public class Department {
     private String location;
 
     // TODO 2.3 sẽ thêm phần OneToMany ở đây
+    @OneToMany(mappedBy = "department", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Employee> employees = new ArrayList<>(); // khởi tạo sẵn, tránh NPE
 
+    public List<Employee> getEmployees() { return employees; }
     public Department() {}
 
     public Department(String name, String location) {
