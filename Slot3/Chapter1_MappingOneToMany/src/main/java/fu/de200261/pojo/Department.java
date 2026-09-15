@@ -30,6 +30,16 @@ public class Department {
         this.location = location;
     }
 
+    public void addEmployee(Employee e) {
+        employees.add(e);
+        e.setDepartment(this);
+    }
+
+    public void removeEmployee(Employee e) {
+        employees.remove(e);
+        e.setDepartment(null);
+    }
+
     // getter/setter
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
