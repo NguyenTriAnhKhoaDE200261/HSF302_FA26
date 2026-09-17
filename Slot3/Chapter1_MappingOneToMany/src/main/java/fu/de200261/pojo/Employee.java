@@ -1,6 +1,5 @@
 package fu.de200261.pojo;
 
-package fu.se123456.pojo;
 
 import jakarta.persistence.*;
 import java.math.BigDecimal;
