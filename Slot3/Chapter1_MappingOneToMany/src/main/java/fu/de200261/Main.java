@@ -5,9 +5,10 @@ import fu.de200261.pojo.Department;
 import fu.de200261.pojo.Employee;
 import fu.de200261.pojo.Gender;
 import fu.de200261.util.JPAUtil;
-
+import java.util.List;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import jakarta.persistence.EntityManager;
 
 public class Main {
     public static void main(String[] args) {
@@ -37,7 +38,19 @@ public class Main {
         for (Employee e : found.getEmployees()) {
             System.out.println(" - " + e);
         }
-
+        // ===== TODO 2.8: Tai hien N+1 Query Problem =====
+        System.out.println("\n===== Test N+1 Problem (khong JOIN FETCH) =====");
+        EntityManager emTest = JPAUtil.getEntityManager();
+        try {
+            List<Department> all = emTest.createQuery("SELECT d FROM Department d", Department.class)
+                    .getResultList(); // 1 cau SELECT
+            for (Department d : all) {
+                // Session con mo => lazy-load duoc, nhung moi Department se ban them 1 cau SELECT rieng
+                System.out.println(d.getName() + " co " + d.getEmployees().size() + " nhan vien");
+            }
+        } finally {
+            emTest.close();
+        }
         JPAUtil.close();
     }
 }

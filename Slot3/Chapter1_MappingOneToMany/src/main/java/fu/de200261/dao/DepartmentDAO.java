@@ -50,12 +50,10 @@ import java.util.List;
     }
 
     // Lấy TẤT CẢ Department kèm Employee, dùng cho TODO 2.9 (fix N+1)
-    public List<Department> findAllWithEmployees() {
+    public List<Department> findAll() {
         EntityManager em = JPAUtil.getEMF().createEntityManager();
         try {
-            return em.createQuery(
-                            "SELECT DISTINCT d FROM Department d JOIN FETCH d.employees",
-                            Department.class)
+            return em.createQuery("SELECT d FROM Department d", Department.class)
                     .getResultList();
         } finally {
             em.close();
