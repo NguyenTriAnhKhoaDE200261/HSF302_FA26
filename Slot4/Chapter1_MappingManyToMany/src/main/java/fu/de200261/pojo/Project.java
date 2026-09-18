@@ -59,4 +59,17 @@ public class Project {
     public String toString() {
         return projectName + " (" + projectCode + ")";
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Project)) return false;
+        Project project = (Project) o;
+        return projectCode != null && projectCode.equals(project.projectCode);
+    }
+
+    @Override
+    public int hashCode() {
+        return projectCode != null ? projectCode.hashCode() : 0;
+    }
 }
