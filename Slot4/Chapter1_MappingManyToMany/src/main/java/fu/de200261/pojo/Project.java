@@ -23,9 +23,12 @@ public class Project {
 
     private LocalDate startDate;
 
-    private LocalDate endDate; // co the null neu du an chua ket thuc
+    private LocalDate endDate;
 
-    // TODO 5.3 se them quan he @ManyToMany(mappedBy = "projects") o day
+    @ManyToMany(mappedBy = "projects")
+    private Set<Employee> employees = new HashSet<>();
+
+    public Set<Employee> getEmployees() { return employees; }
 
     public Project() {}
 
