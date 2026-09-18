@@ -26,9 +26,17 @@ public class Employee {
     @Enumerated(EnumType.STRING)
     private Gender gender;
 
-    private boolean active = true; // mac dinh true theo de bai
+    private boolean active = true;
 
-    // TODO 5.2 se them quan he @ManyToMany o day (KHONG con @ManyToOne Department nua)
+    @ManyToMany
+    @JoinTable(
+            name = "employee_project",
+            joinColumns = @JoinColumn(name = "employee_id"),
+            inverseJoinColumns = @JoinColumn(name = "project_id")
+    )
+    private Set<Project> projects = new HashSet<>();
+
+    public Set<Project> getProjects() { return projects; }
 
     public Employee() {}
 
