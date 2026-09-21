@@ -1,6 +1,7 @@
 package fu.de200261;
 
 import fu.de200261.dao.EmployeeDAO;
+import fu.de200261.dao.ProjectDAO;
 import fu.de200261.pojo.Employee;
 import fu.de200261.pojo.Gender;
 import fu.de200261.pojo.Project;
@@ -16,6 +17,7 @@ public class Main {
         EntityManager em = JPAUtil.getEntityManager();
         EntityTransaction et = em.getTransaction();
         EmployeeDAO employeeDAO = new EmployeeDAO();
+        ProjectDAO projectDAO = new ProjectDAO();
 
         try {
             et.begin();
@@ -65,5 +67,11 @@ public class Main {
         } finally {
             em.close();
         }
+        // 4. In ra danh sách project của từng nhân viên để kiểm tra
+        System.out.println("\n--- DANH SÁCH DỰ ÁN CỦA TỪNG NHÂN VIÊN ---");
+        // ... (các đoạn code in nhân viên cũ)
+
+        // Thêm đoạn này để chạy TODO 5.8:
+        projectDAO.printProjectStatistics();
     }
 }
