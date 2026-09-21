@@ -36,13 +36,18 @@ public class Employee {
     )
     private Set<Project> projects = new HashSet<>();
 
-    public Set<Project> getProjects() { return projects; }
+    public Set<Project> getProjects() {
+        return projects;
+    }
+
+    // Helper method: dong bo 2 chieu khi phan cong nhan vien vao du an
     public void assignToProject(Project p) {
         this.projects.add(p);
         p.getEmployees().add(this);
     }
 
-    public Employee() {}
+    public Employee() {
+    }
 
     public Employee(String email, String fullName, Gender gender, BigDecimal salary, LocalDate hireDate) {
         this.email = email;
@@ -54,38 +59,59 @@ public class Employee {
     }
 
     // getter/setter
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
-    public String getFullName() { return fullName; }
-    public void setFullName(String fullName) { this.fullName = fullName; }
-    public BigDecimal getSalary() { return salary; }
-    public void setSalary(BigDecimal salary) { this.salary = salary; }
-    public LocalDate getHireDate() { return hireDate; }
-    public void setHireDate(LocalDate hireDate) { this.hireDate = hireDate; }
-    public String getEmail() { return email; }
-    public void setEmail(String email) { this.email = email; }
-    public Gender getGender() { return gender; }
-    public void setGender(Gender gender) { this.gender = gender; }
-    public boolean isActive() { return active; }
-    public void setActive(boolean active) { this.active = active; }
-
-    // TODO 5.4 se them equals()/hashCode() o day
-
-    @Override
-    public String toString() {
-        return fullName + " (" + email + ", " + gender + ")";
+    public Long getId() {
+        return id;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Employee)) return false;
-        Employee employee = (Employee) o;
-        return email != null && email.equals(employee.email);
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    @Override
-    public int hashCode() {
-        return email != null ? email.hashCode() : 0;
+    public String getFullName() {
+        return fullName;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
+
+    public BigDecimal getSalary() {
+        return salary;
+    }
+
+    public void setSalary(BigDecimal salary) {
+        this.salary = salary;
+    }
+
+    public LocalDate getHireDate() {
+        return hireDate;
+    }
+
+    public void setHireDate(LocalDate hireDate) {
+        this.hireDate = hireDate;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public Gender getGender() {
+        return gender;
+    }
+
+    public void setGender(Gender gender) {
+        this.gender = gender;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 }
