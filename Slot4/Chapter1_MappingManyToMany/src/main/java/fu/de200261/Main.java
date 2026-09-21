@@ -19,22 +19,28 @@ public class Main {
         EmployeeDAO employeeDAO = new EmployeeDAO();
         ProjectDAO projectDAO = new ProjectDAO();
 
+        // Khai báo biến ở phạm vi bên ngoài try-catch để bên dưới tái sử dụng được
+        Employee emp1 = null;
+        Employee emp2 = null;
+        Employee emp3 = null;
+        Project projA = null;
+        Project projB = null;
+
         try {
             et.begin();
 
-            // 1. Tạo 3 Employee
-            Employee emp1 = new Employee("a.nguyen@example.com", "Nguyen Van A", Gender.MALE, new BigDecimal("1500.00"), LocalDate.of(2023, 1, 15));
-            Employee emp2 = new Employee("b.tran@example.com", "Tran Thi B", Gender.FEMALE, new BigDecimal("2000.00"), LocalDate.of(2022, 5, 10));
-            Employee emp3 = new Employee("c.le@example.com", "Le Van C", Gender.MALE, new BigDecimal("1200.00"), LocalDate.of(2024, 3, 1));
+            // 1. Khởi tạo giá trị
+            emp1 = new Employee("a.nguyen@example.com", "Nguyen Van A", Gender.MALE, new BigDecimal("1500.00"), LocalDate.of(2023, 1, 15));
+            emp2 = new Employee("b.tran@example.com", "Tran Thi B", Gender.FEMALE, new BigDecimal("2000.00"), LocalDate.of(2022, 5, 10));
+            emp3 = new Employee("c.le@example.com", "Le Van C", Gender.MALE, new BigDecimal("1200.00"), LocalDate.of(2024, 3, 1));
 
-            // 2. Tạo 2 Project
-            Project projA = new Project("PROJ-01", "Dự án Web E-Commerce", new BigDecimal("50000.00"), LocalDate.of(2026, 1, 1));
+            projA = new Project("PROJ-01", "Dự án Web E-Commerce", new BigDecimal("50000.00"), LocalDate.of(2026, 1, 1));
             projA.setEndDate(LocalDate.of(2026, 6, 30));
 
-            Project projB = new Project("PROJ-02", "Hệ thống Quản lý Kho", new BigDecimal("30000.00"), LocalDate.of(2026, 2, 1));
+            projB = new Project("PROJ-02", "Hệ thống Quản lý Kho", new BigDecimal("30000.00"), LocalDate.of(2026, 2, 1));
             projB.setEndDate(null);
 
-            // Lưu Employee và Project vào DB trước khi phân công
+            // Lưu vào DB
             em.persist(emp1);
             em.persist(emp2);
             em.persist(emp3);
@@ -44,34 +50,33 @@ public class Main {
             et.commit();
             System.out.println(">>> Đã tạo thành công các Employee và Project!");
 
-            // 3. Phân công chéo sử dụng helper method qua DAO
-            employeeDAO.assignEmployeeToProject(emp1.getId(), projA.getId());
-            employeeDAO.assignEmployeeToProject(emp1.getId(), projB.getId());
-            employeeDAO.assignEmployeeToProject(emp2.getId(), projB.getId());
-            employeeDAO.assignEmployeeToProject(emp3.getId(), projA.getId());
-
-            // 4. In ra danh sách project của từng nhân viên để kiểm tra
-            System.out.println("\n--- DANH SÁCH DỰ ÁN CỦA TỪNG NHÂN VIÊN ---");
-            Employee checkEmp1 = employeeDAO.findById(emp1.getId());
-            System.out.println("Nhân viên: " + checkEmp1.getFullName() + " tham gia " + checkEmp1.getProjects().size() + " dự án.");
-
-            Employee checkEmp2 = employeeDAO.findById(emp2.getId());
-            System.out.println("Nhân viên: " + checkEmp2.getFullName() + " tham gia " + checkEmp2.getProjects().size() + " dự án.");
-
-            Employee checkEmp3 = employeeDAO.findById(emp3.getId());
-            System.out.println("Nhân viên: " + checkEmp3.getFullName() + " tham gia " + checkEmp3.getProjects().size() + " dự án.");
-
         } catch (Exception e) {
             if (et.isActive()) et.rollback();
             e.printStackTrace();
         } finally {
             em.close();
         }
-        // 4. In ra danh sách project của từng nhân viên để kiểm tra
-        System.out.println("\n--- DANH SÁCH DỰ ÁN CỦA TỪNG NHÂN VIÊN ---");
-        // ... (các đoạn code in nhân viên cũ)
 
-        // Thêm đoạn này để chạy TODO 5.8:
-        projectDAO.printProjectStatistics();
+        // 2. Phân công chéo và demo TODO 5.9 (Viết ở ngoài try hoặc trong một try mới để gọi thoải mái biến emp1, projA...)
+        try {
+            // Phân công chéo
+            employeeDAO.assignEmployeeToProject(emp1.getId(), projA.getId());
+            employeeDAO.assignEmployeeToProject(emp1.getId(), projB.getId());
+            employeeDAO.assignEmployeeToProject(emp2.getId(), projB.getId());
+            employeeDAO.assignEmployeeToProject(emp3.getId(), projA.getId());
+
+            // Thống kê TODO 5.8
+            projectDAO.printProjectStatistics();
+
+            // Demo TODO 5.9: Gỡ nhân viên 1 khỏi Dự án A
+            System.out.println("\n--- DEMO TODO 5.9: GỠ NHÂN VIÊN KHỎI DỰ ÁN ---");
+            employeeDAO.unassignEmployeeFromProject(emp1.getId(), projA.getId());
+
+            // Gọi lại thống kê kiểm tra
+            projectDAO.printProjectStatistics();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

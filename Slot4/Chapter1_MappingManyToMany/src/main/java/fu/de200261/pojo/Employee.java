@@ -9,7 +9,11 @@ import java.util.Set;
 @Entity
 @Table(name = "employees")
 public class Employee {
-
+    // TODO 5.9: Gỡ nhân viên khỏi dự án (đồng bộ 2 chiều)
+    public void unassignFromProject(Project project) {
+        this.projects.remove(project);
+        project.getEmployees().remove(this);
+    }
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

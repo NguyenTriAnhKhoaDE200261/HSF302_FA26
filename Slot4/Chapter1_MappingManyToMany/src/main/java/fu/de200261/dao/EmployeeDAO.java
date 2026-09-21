@@ -59,4 +59,30 @@ public class EmployeeDAO {
             em.close();
         }
     }
+    // TODO 5.9: Gỡ nhân viên khỏi dự án trong 1 transaction
+    public void unassignEmployeeFromProject(Long employeeId, Long projectId) {
+        EntityManager em = JPAUtil.getEntityManager();
+        EntityTransaction et = em.getTransaction();
+        try {
+            et.begin();
+            Employee employee = em.find(Employee.class, employeeId);
+            Project project = em.find(Project.class, projectId);
+
+            if (employee != null && project != null) {
+                // Gọi helper method gỡ quan hệ 2 chiều
+                employee.unassignFromProject(project);
+
+                et.commit();
+                System.out.println("Đã gỡ thành công nhân viên " + employee.getFullName() + " khỏi dự án " + project.getProjectName());
+            } else {
+                et.rollback();
+                System.out.println("Không tìm thấy Employee hoặc Project với ID tương ứng!");
+            }
+        } catch (Exception e) {
+            if (et.isActive()) et.rollback();
+            e.printStackTrace();
+        } finally {
+            em.close();
+        }
+    }
 }
