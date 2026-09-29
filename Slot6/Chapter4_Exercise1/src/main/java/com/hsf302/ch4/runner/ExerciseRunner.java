@@ -20,14 +20,14 @@ public class ExerciseRunner implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        System.out.println("\n===== TODO 6: count / findById / existsById =====");
-        System.out.println("Tổng số department: " + departmentService.count());
-        System.out.println("Tổng số student: " + studentService.count());
+        System.out.println("\n===== TODO 7: findAll(Sort) / findAll(Pageable) =====");
 
-        Optional<Student> s1 = studentService.findById(1L);
-        System.out.println("Student id=1: " + s1.map(Student::toString).orElse("Không tìm thấy"));
+        System.out.println("-- Sắp xếp theo GPA giảm dần --");
+        studentService.findAllSortedByGpaDesc()
+                .forEach(s -> System.out.println("  " + s));
 
-        System.out.println("Student id=999 tồn tại? " + studentService.existsById(999L));
-        System.out.println("Department id=1 tồn tại? " + departmentService.existsById(1L));
+        System.out.println("-- Trang 0, size 3, sắp xếp theo fullName --");
+        studentService.findPage(0, 3, "fullName")
+                .forEach(s -> System.out.println("  " + s));
     }
 }
