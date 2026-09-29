@@ -20,6 +20,19 @@ public class ExerciseRunner implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
+
+        // ===== TODO 6 =====
+        System.out.println("\n===== TODO 6: count / findById / existsById =====");
+        System.out.println("Tổng số department: " + departmentService.count());
+        System.out.println("Tổng số student: " + studentService.count());
+
+        Optional<Student> s1 = studentService.findById(1L);
+        System.out.println("Student id=1: " + s1.map(Student::toString).orElse("Không tìm thấy"));
+
+        System.out.println("Student id=999 tồn tại? " + studentService.existsById(999L));
+        System.out.println("Department id=1 tồn tại? " + departmentService.existsById(1L));
+
+        // ===== TODO 7 =====
         System.out.println("\n===== TODO 7: findAll(Sort) / findAll(Pageable) =====");
 
         System.out.println("-- Sắp xếp theo GPA giảm dần --");
@@ -29,5 +42,18 @@ public class ExerciseRunner implements CommandLineRunner {
         System.out.println("-- Trang 0, size 3, sắp xếp theo fullName --");
         studentService.findPage(0, 3, "fullName")
                 .forEach(s -> System.out.println("  " + s));
+
+        // ===== TODO 8 =====
+        System.out.println("\n===== TODO 8: findBy / existsBy / countBy =====");
+
+        System.out.println("Tìm student SE002: "
+                + studentService.findByStudentCode("SE002").map(Student::toString).orElse("Không tìm thấy"));
+
+        System.out.println("Email 'an.nv@fpt.edu.vn' đã tồn tại? "
+                + studentService.isEmailExisted("an.nv@fpt.edu.vn"));
+        System.out.println("Email 'khongton@gmail.com' đã tồn tại? "
+                + studentService.isEmailExisted("khongton@gmail.com"));
+
+        System.out.println("Số student đang active: " + studentService.countActive());
     }
 }

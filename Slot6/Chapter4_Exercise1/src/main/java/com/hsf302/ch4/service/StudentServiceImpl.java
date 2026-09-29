@@ -20,6 +20,7 @@ public class StudentServiceImpl implements StudentService {
 
     private final StudentRepository studentRepository;
 
+    // ===== TODO 6 =====
     @Override
     public long count() {
         return studentRepository.count();
@@ -35,6 +36,7 @@ public class StudentServiceImpl implements StudentService {
         return studentRepository.existsById(id);
     }
 
+    // ===== TODO 7 =====
     @Override
     public List<Student> findAllSortedByGpaDesc() {
         return studentRepository.findAll(Sort.by("gpa").descending());
@@ -47,5 +49,21 @@ public class StudentServiceImpl implements StudentService {
         }
         Pageable pageable = PageRequest.of(pageIndex, size, Sort.by(sortField).ascending());
         return studentRepository.findAll(pageable);
+    }
+
+    // ===== TODO 8 =====
+    @Override
+    public Optional<Student> findByStudentCode(String studentCode) {
+        return studentRepository.findByStudentCode(studentCode);
+    }
+
+    @Override
+    public boolean isEmailExisted(String email) {
+        return studentRepository.existsByEmail(email);
+    }
+
+    @Override
+    public long countActive() {
+        return studentRepository.countByActiveTrue();
     }
 }
