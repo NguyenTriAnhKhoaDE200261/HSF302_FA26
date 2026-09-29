@@ -8,4 +8,6 @@ public interface StudentService {
     long count();
 
     Optional<Student> findById(Long id);
+
+    boolean existsById(Long id);
 }

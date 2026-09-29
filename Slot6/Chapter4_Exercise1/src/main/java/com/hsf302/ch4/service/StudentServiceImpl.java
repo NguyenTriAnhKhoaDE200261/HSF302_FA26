@@ -24,4 +24,9 @@ public class StudentServiceImpl implements StudentService {
     public Optional<Student> findById(Long id) {
         return studentRepository.findById(id);
     }
+
+    @Override
+    public boolean existsById(Long id) {
+        return studentRepository.existsById(id);
+    }
 }
