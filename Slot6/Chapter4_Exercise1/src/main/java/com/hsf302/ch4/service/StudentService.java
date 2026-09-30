@@ -6,6 +6,9 @@ import org.springframework.data.domain.Page;
 import java.util.List;
 import java.util.Optional;
 
+import com.hsf302.ch4.pojo.Gender;
+import java.time.LocalDate;
+
 
 public interface StudentService {
     List<Student> searchByName(String keyword);
@@ -28,4 +31,10 @@ public interface StudentService {
     boolean isEmailExisted(String email);
 
     long countActive();
+
+    List<Student> findByGpaRange(double min, double max);
+
+    List<Student> findActiveByGender(Gender gender);
+
+    List<Student> findBornAfter(LocalDate date);
 }

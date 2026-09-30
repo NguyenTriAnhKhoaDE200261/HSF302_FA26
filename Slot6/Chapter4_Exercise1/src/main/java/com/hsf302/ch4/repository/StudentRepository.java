@@ -8,6 +8,10 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
 
+import com.hsf302.ch4.pojo.Gender;
+import java.time.LocalDate;
+
+
 @Repository
 public interface StudentRepository extends JpaRepository<Student, Long>, JpaSpecificationExecutor<Student> {
 
@@ -22,4 +26,10 @@ public interface StudentRepository extends JpaRepository<Student, Long>, JpaSpec
     List<Student> findByEmailEndingWith(String suffix);
 
     List<Student> findByEmailIsNull();
+
+    List<Student> findByGpaBetweenOrderByGpaDesc(double min, double max);
+
+    List<Student> findByGenderAndActiveTrue(Gender gender);
+
+    List<Student> findByDobAfter(LocalDate date);
 }

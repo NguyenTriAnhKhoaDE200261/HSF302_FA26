@@ -10,6 +10,9 @@ import org.springframework.stereotype.Component;
 
 import java.util.Optional;
 
+import com.hsf302.ch4.pojo.Gender;
+import java.time.LocalDate;
+
 @Component
 @Order(2)
 @RequiredArgsConstructor
@@ -68,6 +71,20 @@ public class ExerciseRunner implements CommandLineRunner {
 
         System.out.println("-- Student chưa có email --");
         studentService.findWithoutEmail()
+                .forEach(s -> System.out.println("  " + s));
+
+        System.out.println("\n===== TODO 10: Between / And+True / After =====");
+
+        System.out.println("-- Student có GPA từ 3.0 đến 4.0, sắp giảm dần --");
+        studentService.findByGpaRange(3.0, 4.0)
+                .forEach(s -> System.out.println("  " + s));
+
+        System.out.println("-- Student nữ đang active --");
+        studentService.findActiveByGender(Gender.FEMALE)
+                .forEach(s -> System.out.println("  " + s));
+
+        System.out.println("-- Student sinh sau ngày 2004-01-01 --");
+        studentService.findBornAfter(LocalDate.of(2004, 1, 1))
                 .forEach(s -> System.out.println("  " + s));
     }
 }
