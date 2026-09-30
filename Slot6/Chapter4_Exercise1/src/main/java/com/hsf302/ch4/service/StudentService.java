@@ -6,8 +6,13 @@ import org.springframework.data.domain.Page;
 import java.util.List;
 import java.util.Optional;
 
-public interface StudentService {
 
+public interface StudentService {
+    List<Student> searchByName(String keyword);
+
+    List<Student> findByEmailDomain(String domain);
+
+    List<Student> findWithoutEmail();
     long count();
 
     Optional<Student> findById(Long id);

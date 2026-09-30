@@ -55,5 +55,19 @@ public class ExerciseRunner implements CommandLineRunner {
                 + studentService.isEmailExisted("khongton@gmail.com"));
 
         System.out.println("Số student đang active: " + studentService.countActive());
+
+        System.out.println("\n===== TODO 9: Containing / IgnoreCase / EndingWith / IsNull =====");
+
+        System.out.println("-- Tìm student có tên chứa 'van' (không phân biệt hoa thường) --");
+        studentService.searchByName("van")
+                .forEach(s -> System.out.println("  " + s));
+
+        System.out.println("-- Student thuộc domain email fpt.edu.vn --");
+        studentService.findByEmailDomain("fpt.edu.vn")
+                .forEach(s -> System.out.println("  " + s));
+
+        System.out.println("-- Student chưa có email --");
+        studentService.findWithoutEmail()
+                .forEach(s -> System.out.println("  " + s));
     }
 }
