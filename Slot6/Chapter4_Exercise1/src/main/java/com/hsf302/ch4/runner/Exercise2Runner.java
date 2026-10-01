@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
+import java.util.Collection;
 
 @Component
 @Order(3)
@@ -19,6 +20,31 @@ public class Exercise2Runner implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        // TODO 6 → 25 sẽ gọi lần lượt tại đây
+        partB();
+    }
+    private void partB() {
+        todo6();
+        // todo7();
+    }
+
+    private void todo6() {
+        title("TODO 6: count, findAll(Sort), findById");
+        System.out.println("Total courses: " + courseService.count());
+        printList("All courses order by code", courseService.findAllOrderByCode());
+        for (long id : new long[]{2L, 99L}) {
+            System.out.println("findById(" + id + "): "
+                    + courseService.findById(id).map(Object::toString).orElse("Not found"));
+        }
+    }
+
+    // ===== Helpers =====
+    private void title(String t) {
+        System.out.println("\n===== " + t + " =====");
+    }
+
+    private void printList(String label, Collection<?> list) {
+        System.out.println("-- " + label + ":");
+        list.forEach(o -> System.out.println("   " + o));
+        System.out.println("   -> " + list.size() + " record(s)");
     }
 }
