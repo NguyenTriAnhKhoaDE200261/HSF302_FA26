@@ -6,8 +6,18 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 import java.util.List;
 
+import com.hsf302.ch4.dto.CourseStatDTO;
+import org.springframework.data.jpa.repository.Query;
+
 @Repository
 public interface CourseRepository extends JpaRepository<Course, Long> {
+
+    @Query("SELECT new com.hsf302.ch4.dto.CourseStatDTO(c.code, c.name, c.capacity, COUNT(s), AVG(s.gpa)) " +
+            "FROM Course c LEFT JOIN c.students s " +
+            "GROUP BY c.code, c.name, c.capacity ORDER BY c.code")
+    List<CourseStatDTO> getCourseStats();
+
+
     Optional<Course> findByCode(String code);
 
     List<Course> findBySemesterOrderByCodeAsc(String semester);
