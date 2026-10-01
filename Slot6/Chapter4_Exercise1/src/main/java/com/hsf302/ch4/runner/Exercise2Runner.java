@@ -24,7 +24,7 @@ public class Exercise2Runner implements CommandLineRunner {
     }
     private void partB() {
         todo6();
-        // todo7();
+        todo7();
     }
 
     private void todo6() {
@@ -35,6 +35,12 @@ public class Exercise2Runner implements CommandLineRunner {
             System.out.println("findById(" + id + "): "
                     + courseService.findById(id).map(Object::toString).orElse("Not found"));
         }
+    }
+
+    private void todo7() {
+        title("TODO 7: navigate student.getCourses() / course.getStudents()");
+        printList("(a) Courses of SE001", enrollmentService.getCoursesOfStudent("SE001"));
+        printList("(b) Students of AIL303", enrollmentService.getStudentsOfCourse("AIL303"));
     }
 
     // ===== Helpers =====
