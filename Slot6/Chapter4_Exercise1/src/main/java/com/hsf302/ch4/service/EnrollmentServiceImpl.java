@@ -35,6 +35,21 @@ public class EnrollmentServiceImpl implements EnrollmentService {
                 .toList();
     }
 
+    @Override
+    public List<Student> findStudentsInCourse(String courseCode) {
+        return studentRepository.findByCourses_CodeOrderByFullNameAsc(courseCode);
+    }
+
+    @Override
+    public long countStudentsInCourse(String courseCode) {
+        return studentRepository.countByCourses_Code(courseCode);
+    }
+
+    @Override
+    public List<Student> findActiveStudentsInCourse(String courseCode) {
+        return studentRepository.findByCourses_CodeAndActiveTrueOrderByFullNameAsc(courseCode);
+    }
+
     // ===== Helpers nội bộ trong Service =====
     private Student getStudent(String studentCode) {
         return studentRepository.findByStudentCode(studentCode)
