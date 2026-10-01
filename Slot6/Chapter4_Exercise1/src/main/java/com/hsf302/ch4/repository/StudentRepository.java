@@ -11,9 +11,16 @@ import java.util.Optional;
 import com.hsf302.ch4.pojo.Gender;
 import java.time.LocalDate;
 
+import org.springframework.data.repository.query.Param;
+import java.util.List;
+import org.springframework.data.jpa.repository.Query;
 
 @Repository
 public interface StudentRepository extends JpaRepository<Student, Long>, JpaSpecificationExecutor<Student> {
+    @Query("SELECT s FROM Student s JOIN s.courses c " +
+            "WHERE c.code = :code AND s.gpa >= :minGpa ORDER BY s.gpa DESC")
+    List<Student> findGoodStudentsInCourse(@Param("code") String courseCode,
+                                           @Param("minGpa") double minGpa);
 
     Optional<Student> findByStudentCode(String studentCode);
 
