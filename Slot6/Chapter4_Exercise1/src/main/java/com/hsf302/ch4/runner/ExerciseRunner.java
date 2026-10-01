@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.core.annotation.Order;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
+import org.springframework.context.annotation.Profile;
 
 import java.util.Optional;
 
@@ -15,6 +16,7 @@ import java.time.LocalDate;
 
 @Component
 @Order(2)
+@Profile("ex1")
 @RequiredArgsConstructor
 public class ExerciseRunner implements CommandLineRunner {
 
