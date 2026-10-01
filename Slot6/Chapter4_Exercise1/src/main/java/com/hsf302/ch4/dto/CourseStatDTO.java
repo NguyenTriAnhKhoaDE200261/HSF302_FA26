@@ -6,4 +6,7 @@ public record CourseStatDTO(String code, String name, Integer capacity,
     public long remaining() {                 // số chỗ còn trống
         return capacity - enrolled;
     }
+
+    public class StudentCreditDTO {
+    }
 }

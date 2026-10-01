@@ -1,5 +1,7 @@
 package com.hsf302.ch4.service;
 
+import com.hsf302.ch4.dto.StudentCreditDTO;
+import com.hsf302.ch4.dto.CourseStatDTO;
 import com.hsf302.ch4.repository.StudentRepository;
 import com.hsf302.ch4.repository.CourseRepository;
 import lombok.RequiredArgsConstructor;
@@ -66,6 +68,14 @@ public class EnrollmentServiceImpl implements EnrollmentService {
             throw new IllegalArgumentException("minGpa must be in [0, 4]");
         }
         return studentRepository.findGoodStudentsInCourse(courseCode, minGpa);
+    }
+
+    @Override
+    public List<StudentCreditDTO> getCreditSummary(int minCredits) {
+        if (minCredits < 0) {
+            throw new IllegalArgumentException("minCredits must be >= 0");
+        }
+        return studentRepository.getCreditSummary(minCredits);
     }
 
     // ===== Helpers nội bộ trong Service =====
