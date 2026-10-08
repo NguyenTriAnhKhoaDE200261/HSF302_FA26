@@ -1,10 +1,86 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/layout :: layout(~{::title}, ~{::content})}">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <title th:text="${pageTitle}">Form Sinh Viên</title>
 </head>
 <body>
+<div th:fragment="content">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-sm">
+                <div class="card-header bg-dark text-white">
+                    <h4 class="mb-0">
+                        <i class="bi bi-person-plus-fill me-2" th:if="!${isEdit}"></i>
+                        <i class="bi bi-pencil-square me-2" th:if="${isEdit}"></i>
+                        <span th:text="${pageTitle}">Thông tin sinh viên</span>
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <form th:action="${isEdit} ? @{/students/{id}/edit(id=${student.id})} : @{/students/create}"
+                          th:object="${student}" method="post">
 
+                        <!-- Họ tên -->
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Họ và tên</label>
+                            <input type="text" class="form-control" th:field="*{name}"
+                                   th:classappend="${#fields.hasErrors('name')} ? 'is-invalid'"
+                                   placeholder="Nhập họ tên đầy đủ..."/>
+                            <div class="invalid-feedback" th:errors="*{name}">Lỗi tên</div>
+                        </div>
+
+                        <!-- Email -->
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Email</label>
+                            <input type="email" class="form-control" th:field="*{email}"
+                                   th:classappend="${#fields.hasErrors('email')} ? 'is-invalid'"
+                                   placeholder="example@fpt.edu.vn"/>
+                            <div class="invalid-feedback" th:errors="*{email}">Lỗi email</div>
+                        </div>
+
+                        <!-- Tuổi -->
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Tuổi</label>
+                            <input type="number" class="form-control" th:field="*{age}"
+                                   th:classappend="${#fields.hasErrors('age')} ? 'is-invalid'"
+                                   placeholder="Nhập tuổi..."/>
+                            <div class="invalid-feedback" th:errors="*{age}">Lỗi tuổi</div>
+                        </div>
+
+                        <!-- Chuyên ngành (Dropdown chọn từ List<String> majors) -->
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Chuyên ngành</label>
+                            <select class="form-select" th:field="*{major}"
+                                    th:classappend="${#fields.hasErrors('major')} ? 'is-invalid'">
+                                <option value="">-- Chọn chuyên ngành --</option>
+                                <option th:each="m : ${majors}" th:value="${m}" th:text="${m}">CNTT</option>
+                            </select>
+                            <div class="invalid-feedback" th:errors="*{major}">Lỗi chuyên ngành</div>
+                        </div>
+
+                        <!-- Điểm GPA -->
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">Điểm GPA</label>
+                            <input type="number" step="0.1" class="form-control" th:field="*{gpa}"
+                                   th:classappend="${#fields.hasErrors('gpa')} ? 'is-invalid'"
+                                   placeholder="Ví dụ: 3.5"/>
+                            <div class="invalid-feedback" th:errors="*{gpa}">Lỗi GPA</div>
+                        </div>
+
+                        <!-- Nút bấm -->
+                        <div class="d-flex justify-content-between">
+                            <a th:href="@{/students}" class="btn btn-secondary">
+                                <i class="bi bi-arrow-left me-1"></i>Hủy bỏ
+                            </a>
+                            <button type="submit" class="btn btn-success">
+                                <i class="bi bi-save me-1"></i>Lưu thông tin
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 </body>
 </html>

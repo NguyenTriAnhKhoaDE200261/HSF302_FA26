@@ -1,10 +1,93 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/layout :: layout(~{::title}, ~{::#mainContent})}">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Danh sách sinh viên</title>
 </head>
 <body>
+<div id="mainContent">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2><i class="bi bi-people-fill me-2"></i>Danh sách sinh viên</h2>
+        <a th:href="@{/students/create}" class="btn btn-primary">
+            <i class="bi bi-plus-circle me-1"></i>Thêm sinh viên mới
+        </a>
+    </div>
 
+    <!-- Bảng dữ liệu sinh viên -->
+    <div class="card shadow-sm">
+        <div class="card-body p-0">
+            <table class="table table-hover table-striped mb-0 align-middle">
+                <thead class="table-dark">
+                <tr>
+                    <th>ID</th>
+                    <th>Họ tên</th>
+                    <th>Email</th>
+                    <th>Tuổi</th>
+                    <th>Chuyên ngành</th>
+                    <th>GPA</th>
+                    <th class="text-center">Thao tác</th>
+                </tr>
+                </thead>
+                <tbody>
+                <!-- Nếu danh sách trống -->
+                <tr th:if="${#lists.isEmpty(students)}">
+                    <td colspan="7" class="text-center py-4 text-muted">Không có sinh viên nào trong hệ thống.</td>
+                </tr>
+                <!-- Lặp qua danh sách sinh viên -->
+                <tr th:each="s : ${students}">
+                    <td th:text="${s.id}">1</td>
+                    <td>
+                        <a th:href="@{/students/{id}(id=${s.id})}" th:text="${s.name}" class="fw-bold text-decoration-none">Nguyễn Văn An</a>
+                    </td>
+                    <td th:text="${s.email}">an@fpt.edu.vn</td>
+                    <td th:text="${s.age}">20</td>
+                    <td>
+                        <span class="badge bg-secondary" th:text="${s.major}">CNTT</span>
+                    </td>
+                    <td>
+                        <span th:text="${s.gpa}"
+                              th:class="${s.gpa >= 3.5 ? 'gpa-high' : (s.gpa >= 3.0 ? 'gpa-mid' : 'gpa-low')}">3.5</span>
+                    </td>
+                    <td class="text-center">
+                        <div class="btn-group btn-group-sm" role="group">
+                            <a th:href="@{/students/{id}(id=${s.id})}" class="btn btn-outline-info" title="Chi tiết">
+                                <i class="bi bi-eye"></i>
+                            </a>
+                            <a th:href="@{/students/{id}/edit(id=${s.id})}" class="btn btn-outline-warning" title="Sửa">
+                                <i class="bi bi-pencil"></i>
+                            </a>
+                            <button type="button" class="btn btn-outline-danger" title="Xóa"
+                                    data-bs-toggle="modal" th:data-bs-target="${'#deleteModal' + s.id}">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </div>
+
+                        <!-- Modal xác nhận xóa cho từng sinh viên -->
+                        <div class="modal fade" th:id="${'deleteModal' + s.id}" tabindex="-1">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">Xác nhận xóa</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                    </div>
+                                    <div class="modal-body text-start">
+                                        Bạn có chắc chắn muốn xóa sinh viên <b th:text="${s.name}"></b> không?
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                                        <form th:action="@{/students/{id}/delete(id=${s.id})}" method="post" class="d-inline">
+                                            <button type="submit" class="btn btn-danger">Xóa</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
 </body>
 </html>
