@@ -5,6 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.ArrayList;
@@ -44,5 +45,26 @@ public class SinhVienController {
 
         // Điều hướng chuyển hướng về trang danh sách
         return "redirect:/sinhvien";
+    }
+
+    // TODO 3.1: Hiển thị form chỉnh sửa sinh viên
+    @GetMapping("/sinhvien/sua/{maSV}")
+    public String hienFormSua(@PathVariable("maSV") String maSV, Model model) {
+        // Tìm sinh viên trong danh sách theo mã
+        SinhVien svTimThay = null;
+        for (SinhVien sv : danhSach) {
+            if (sv.getMaSV().equals(maSV)) {
+                svTimThay = sv;
+                break;
+            }
+        }
+
+        if (svTimThay == null) {
+            return "redirect:/sinhvien";
+        }
+
+        model.addAttribute("sinhVien", svTimThay);
+        model.addAttribute("tieuDe", "Cập nhật thông tin sinh viên");
+        return "sinhvien/sua-moi"; // hoặc dùng chung form them-moi.html tùy ý
     }
 }
