@@ -67,4 +67,18 @@ public class SinhVienController {
         model.addAttribute("tieuDe", "Cập nhật thông tin sinh viên");
         return "sinhvien/sua-moi"; // hoặc dùng chung form them-moi.html tùy ý
     }
+
+    // TODO 3.2: Xử lý POST cập nhật thông tin sinh viên và áp dụng PRG Pattern
+    @PostMapping("/sinhvien/sua")
+    public String xuLySua(@ModelAttribute("sinhVien") SinhVien sinhVienMoi) {
+        // Duyệt danh sách tìm sinh viên cũ theo mã để cập nhật thông tin mới
+        for (int i = 0; i < danhSach.size(); i++) {
+            if (danhSach.get(i).getMaSV().equals(sinhVienMoi.getMaSV())) {
+                danhSach.set(i, sinhVienMoi); // Thay thế bằng object mới
+                break;
+            }
+        }
+        // PRG Pattern: Redirect về trang danh sách
+        return "redirect:/sinhvien";
+    }
 }
