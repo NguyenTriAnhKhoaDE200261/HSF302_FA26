@@ -11,13 +11,10 @@
 <body>
 <main class="container py-4">
 
-    <h1 class="h3 mb-3" th:text="${tieuDe}">Tiêu đề</h1>
-
+    <!-- Giữ lại 1 tiêu đề và nút Thêm mới cho gọn -->
     <div class="d-flex justify-content-between align-items-center mb-3">
-        <h1 class="h3 m-0" th:text="${tieuDe}">Tiêu đề</h1>
-        <a th:href="@{/sinhvien/them}" class="btn btn-primary">
-            <i class="bi bi-plus-circle me-1"></i> Thêm sinh viên mới
-        </a>
+        <h1 class="h3 m-0" th:text="${tieuDe}">Danh sách sinh viên</h1>
+        <a th:href="@{/sinhvien/them}" class="btn btn-primary">Thêm sinh viên mới</a>
     </div>
 
     <!-- Nếu danh sách KHÔNG rỗng -> hiện bảng -->
@@ -25,27 +22,40 @@
            th:unless="${#lists.isEmpty(sinhViens)}">
         <thead class="table-dark">
         <tr>
-            <th>#</th>
-            <th>Mã SV</th>
-            <th>Họ tên</th>
-            <th class="text-end">Điểm TB</th>
-            <th>Xếp loại</th>
-            <th class="text-center">Thao tác</th>
+            <th style="width: 5%;">#</th>
+            <th style="width: 15%;">Mã SV</th>
+            <th style="width: 30%;">Họ tên</th>
+            <th class="text-end" style="width: 15%;">Điểm TB</th>
+            <th style="width: 15%;">Xếp loại</th>
+            <th class="text-center" style="width: 20%;">Thao tác</th>
         </tr>
         </thead>
         <tbody>
         <tr th:each="sv, stat : ${sinhViens}">
+            <!-- 1. STT -->
             <td th:text="${stat.count}">1</td>
+
+            <!-- 2. Mã SV -->
             <td th:text="${sv.maSV}">SV001</td>
+
+            <!-- 3. Họ tên -->
             <td th:text="${sv.hoTen}">Nguyễn Văn A</td>
+
+            <!-- 4. Điểm TB -->
             <td class="text-end" th:text="${#numbers.formatDecimal(sv.diemTB, 1, 1)}">8.5</td>
-            <td class="text-center">
-                <a th:href="@{/sinhvien/sua/{id}(id=${sv.maSV})}" class="btn btn-sm btn-warning">Sửa</a>
-            </td>
+
+            <!-- 5. Xếp loại -->
             <td>
                 <span th:if="${sv.diemTB >= 8.0}" class="badge bg-success">Giỏi</span>
                 <span th:if="${sv.diemTB >= 6.5 and sv.diemTB < 8.0}" class="badge bg-primary">Khá</span>
                 <span th:if="${sv.diemTB < 6.5}" class="badge bg-danger">Trung bình</span>
+            </td>
+
+            <!-- 6. Thao tác (Sửa / Xóa) -->
+            <td class="text-center">
+                <a th:href="@{/sinhvien/sua/{id}(id=${sv.maSV})}" class="btn btn-sm btn-warning me-1">Sửa</a>
+                <a th:href="@{/sinhvien/xoa/{id}(id=${sv.maSV})}" class="btn btn-sm btn-danger"
+                   onclick="return confirm('Bạn có chắc chắn muốn xóa sinh viên này không?');">Xóa</a>
             </td>
         </tr>
         </tbody>

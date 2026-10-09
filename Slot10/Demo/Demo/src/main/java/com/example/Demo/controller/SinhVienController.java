@@ -81,4 +81,14 @@ public class SinhVienController {
         // PRG Pattern: Redirect về trang danh sách
         return "redirect:/sinhvien";
     }
+
+    // TODO 3.3: Xử lý xóa sinh viên theo mã SV
+    @GetMapping("/sinhvien/xoa/{maSV}")
+    public String xoaSinhVien(@PathVariable("maSV") String maSV) {
+        // Xóa sinh viên có mã trùng khớp khỏi danh sách
+        danhSach.removeIf(sv -> sv.getMaSV().equals(maSV));
+
+        // Redirect về trang danh sách sau khi xóa
+        return "redirect:/sinhvien";
+    }
 }
