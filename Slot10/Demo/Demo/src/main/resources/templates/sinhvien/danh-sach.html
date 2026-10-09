@@ -13,6 +13,13 @@
 
     <h1 class="h3 mb-3" th:text="${tieuDe}">Tiêu đề</h1>
 
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h1 class="h3 m-0" th:text="${tieuDe}">Tiêu đề</h1>
+        <a th:href="@{/sinhvien/them}" class="btn btn-primary">
+            <i class="bi bi-plus-circle me-1"></i> Thêm sinh viên mới
+        </a>
+    </div>
+
     <!-- Nếu danh sách KHÔNG rỗng -> hiện bảng -->
     <table class="table table-bordered table-hover bg-white"
            th:unless="${#lists.isEmpty(sinhViens)}">
