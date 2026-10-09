@@ -1,0 +1,21 @@
+body {
+    background-color: #f8f9fa;
+}
+
+.table th {
+    white-space: nowrap;
+}
+
+/* Các tùy chỉnh màu sắc GPA cho sinh viên */
+.gpa-high {
+    color: #198754;
+    font-weight: bold;
+}
+.gpa-mid {
+    color: #fd7e14;
+    font-weight: bold;
+}
+.gpa-low {
+    color: #dc3545;
+    font-weight: bold;
+}
