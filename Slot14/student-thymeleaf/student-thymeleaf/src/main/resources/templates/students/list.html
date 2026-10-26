@@ -58,8 +58,12 @@
         </div>
     </div>
 
-    <!-- Bảng danh sách sinh viên -->
-    <div class="table-responsive">
+    <!-- TODO 13.1: Nếu danh sách rỗng -> alert-warning và ẩn bảng -->
+    <div th:if="${#lists.isEmpty(students)}" class="alert alert-warning">
+        Không có sinh viên nào.
+    </div>
+
+    <div class="table-responsive" th:unless="${#lists.isEmpty(students)}">
         <table class="table table-bordered table-hover align-middle bg-white">
             <thead class="table-dark">
             <tr>
@@ -68,7 +72,7 @@
             </tr>
             </thead>
             <tbody>
-            <!-- TODO 11 + TODO 12: tra Map nganh, th:switch xep loai, ternary trang thai, th:classappend GPA < 5 -->
+            <!-- TODO 11 + TODO 12: th:each duyệt sinh viên, stat.count, định dạng chuỗi, ngày, tuổi, số, tra ngành Map, switch xếp loại, ternary trạng thái, classappend GPA < 5 -->
             <tr th:each="s, stat : ${students}"
                 th:classappend="${s.gpa lt 5} ? 'table-danger'">
                 <td th:text="${stat.count}">1</td>
@@ -91,10 +95,14 @@
                           th:classappend="${s.active} ? 'text-bg-success' : 'text-bg-secondary'"
                           th:text="${s.active} ? 'Đang học' : 'Bảo lưu'">Đang học</span>
                 </td>
-                <td>
-                    <a href="#" class="btn btn-sm btn-outline-info">Xem</a>
-                    <a href="#" class="btn btn-sm btn-outline-warning">Sửa</a>
-                    <button class="btn btn-sm btn-outline-danger">Xóa</button>
+                <!-- TODO 13.2: Nút Xem, Sửa và Form Xóa với confirm dialog -->
+                <td class="text-nowrap">
+                    <a th:href="@{/students/{id}(id=${s.id})}" class="btn btn-sm btn-outline-info">Xem</a>
+                    <a th:href="@{/students/{id}/edit(id=${s.id})}" class="btn btn-sm btn-outline-warning">Sửa</a>
+                    <form th:action="@{/students/{id}/delete(id=${s.id})}" method="post" class="d-inline"
+                          onsubmit="return confirm('Bạn chắc chắn muốn xóa sinh viên này?');">
+                        <button type="submit" class="btn btn-sm btn-outline-danger">Xóa</button>
+                    </form>
                 </td>
             </tr>
             </tbody>
