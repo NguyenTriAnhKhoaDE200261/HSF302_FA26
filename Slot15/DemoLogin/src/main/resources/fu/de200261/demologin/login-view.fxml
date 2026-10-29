@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox alignment="CENTER" spacing="15.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/17" fx:controller="fu.de200261.demologin.HelloController">
+    <padding>
+        <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
+    </padding>
+
+    <!-- Tiêu đề form -->
+    <Label style="-fx-font-size: 24px; -fx-font-weight: bold;" text="Đăng Nhập" />
+
+    <!-- Ô nhập Tên đăng nhập / Email -->
+    <VBox spacing="5.0">
+        <Label text="Tài khoản" />
+        <TextField fx:id="usernameField" promptText="Nhập tên đăng nhập của bạn" />
+    </VBox>
+
+    <!-- Ô nhập Mật khẩu -->
+    <VBox spacing="5.0">
+        <Label text="Mật khẩu" />
+        <PasswordField fx:id="passwordField" promptText="Nhập mật khẩu của bạn" />
+    </VBox>
+
+    <!-- Nút Đăng nhập -->
+    <Button fx:id="loginButton" maxWidth="Infinity" onAction="#onLoginButtonClick" style="-fx-background-color: #2196F3; -fx-text-fill: white; -fx-font-weight: bold;" text="Đăng Nhập" />
+
+    <!-- Label thông báo lỗi hoặc trạng thái -->
+    <Label fx:id="statusLabel" textFill="RED" />
+</VBox>
