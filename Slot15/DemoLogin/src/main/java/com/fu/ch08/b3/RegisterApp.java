@@ -14,7 +14,9 @@ import javafx.stage.Stage;
 
 import java.time.LocalDate;
 import java.time.Period;
+import java.util.List;
 import java.util.function.BooleanSupplier;
+import java.util.stream.Stream;
 
 public class RegisterApp extends Application {
 
@@ -237,7 +239,34 @@ public class RegisterApp extends Application {
         lblStrength.setStyle("-fx-text-fill: " + LEVEL_COLOR[score] + ";");
     }
 
-    private void handleRegister() {}        // Sẽ triển khai chi tiết ở TODO 7
+    // TODO 7: Đăng ký — dùng & (KHÔNG dùng &&) để chạy HẾT validator → hiện mọi lỗi cùng lúc
+    private void handleRegister() {
+        boolean ok = vFullName() & vEmail() & vUsername() & vPassword()
+                   & vConfirm() & vGender() & vDob() & vMajor();
+        if (!ok) {
+            AlertUtil.warn("Vui lòng sửa các ô đang báo lỗi (chữ đỏ).");
+            return;
+        }
+
+        List<String> hobbies = Stream.of(chkSport, chkMusic, chkGame, chkReading)
+                .filter(CheckBox::isSelected).map(CheckBox::getText).toList();
+        User u = new User(
+                tfFullName.getText().trim(),
+                tfEmail.getText().trim(),
+                tfUsername.getText().trim().toLowerCase(),
+                pfPassword.getText(),
+                ((RadioButton) tgGender.getSelectedToggle()).getText(),
+                dpDob.getValue(),
+                cbMajor.getValue(),
+                hobbies);
+        UserStore.add(u);
+
+        AlertUtil.info("Đăng ký thành công!\nUsername: %s\nNgành: %s\nSở thích: %s".formatted(
+                u.username(), u.major(), hobbies.isEmpty() ? "(không)" : String.join(", ", hobbies)));
+        resetForm();
+        scene.setRoot(buildLoginView(u.username()));    // sang đăng nhập, điền sẵn username
+    }
+
     private void resetForm() {}             // Sẽ triển khai chi tiết ở TODO 8
 
     private Parent buildLoginView(String prefillUser) {
