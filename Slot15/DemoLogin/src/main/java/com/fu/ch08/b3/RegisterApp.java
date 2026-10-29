@@ -1,5 +1,6 @@
 package com.fu.ch08.b3;
 
+import com.fu.ch08.common.AlertUtil;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -10,6 +11,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
+
+import java.util.function.BooleanSupplier;
 
 public class RegisterApp extends Application {
 
@@ -45,6 +48,7 @@ public class RegisterApp extends Application {
     @Override
     public void start(Stage stage) {
         setupControls();
+        registerEvents();
         registerView = buildRegisterView();
         scene = new Scene(registerView, 580, 660);
         stage.setScene(scene);
@@ -133,6 +137,49 @@ public class RegisterApp extends Application {
         l.setWrapText(true);
         return l;
     }
+
+    // TODO 4: Đăng ký sự kiện
+    private void registerEvents() {
+        // 4a. Ô gõ chữ: validate khi RỜI KHỎI ô (mất focus) — không làm phiền khi đang gõ
+        onFocusLost(tfFullName, this::vFullName);
+        onFocusLost(tfEmail, this::vEmail);
+        onFocusLost(tfUsername, this::vUsername);
+        onFocusLost(pfPassword, this::vPassword);
+        onFocusLost(pfConfirm, this::vConfirm);
+
+        // 4b. Control dạng chọn: validate ngay khi giá trị đổi
+        tgGender.selectedToggleProperty().addListener((obs, o, n) -> vGender());
+        dpDob.valueProperty().addListener((obs, o, n) -> vDob());
+        cbMajor.valueProperty().addListener((obs, o, n) -> vMajor());
+
+        // 4c. Độ mạnh mật khẩu — cập nhật theo TỪNG PHÍM gõ
+        pfPassword.textProperty().addListener((obs, o, n) -> updateStrength(n));
+
+        // 4d. Nút
+        btnRegister.setOnAction(e -> handleRegister());
+        btnReset.setOnAction(e -> {
+            if (AlertUtil.confirm("Xóa toàn bộ dữ liệu đã nhập?")) resetForm();
+        });
+    }
+
+    private void onFocusLost(Node node, BooleanSupplier validator) {
+        node.focusedProperty().addListener((obs, wasFocused, isFocused) -> {
+            if (!isFocused) validator.getAsBoolean();
+        });
+    }
+
+    private boolean vFullName() { return true; } // Sẽ triển khai chi tiết ở TODO 5
+    private boolean vEmail() { return true; }
+    private boolean vUsername() { return true; }
+    private boolean vPassword() { return true; }
+    private boolean vConfirm() { return true; }
+    private boolean vGender() { return true; }
+    private boolean vDob() { return true; }
+    private boolean vMajor() { return true; }
+
+    private void updateStrength(String s) {} // Sẽ triển khai chi tiết ở TODO 6
+    private void handleRegister() {}        // Sẽ triển khai chi tiết ở TODO 7
+    private void resetForm() {}             // Sẽ triển khai chi tiết ở TODO 8
 
     private Parent buildLoginView(String prefillUser) {
         return new StackPane(new Label("Màn hình đăng nhập")); // Sẽ triển khai chi tiết ở TODO 9
