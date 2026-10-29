@@ -19,6 +19,8 @@ import java.util.function.BooleanSupplier;
 public class RegisterApp extends Application {
 
     private static final String STRONG_PASSWORD = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[^\\w\\s]).{8,}$";
+    private static final String[] LEVEL_TEXT  = {"Rất yếu", "Yếu", "Trung bình", "Khá", "Mạnh"};
+    private static final String[] LEVEL_COLOR = {"#d93025", "#d93025", "#f29900", "#1a73e8", "#188038"};
 
     private Scene scene;
     private Parent registerView;        // tạo 1 lần, dùng lại khi quay về từ màn hình đăng nhập
@@ -221,7 +223,20 @@ public class RegisterApp extends Application {
         return check(errMajor, cbMajor.getValue() != null, "Vui lòng chọn ngành");
     }
 
-    private void updateStrength(String s) {} // Sẽ triển khai chi tiết ở TODO 6
+    // TODO 6: Độ mạnh mật khẩu (0–4 điểm)
+    private void updateStrength(String s) {
+        int score = 0;
+        if (s.length() >= 8) score++;
+        if (s.matches(".*[a-z].*") && s.matches(".*[A-Z].*")) score++;
+        if (s.matches(".*\\d.*")) score++;
+        if (s.matches(".*[^\\w\\s].*")) score++;
+
+        pbStrength.setProgress(score / 4.0);
+        pbStrength.setStyle("-fx-accent: " + LEVEL_COLOR[score] + ";");   // -fx-accent = màu thanh progress
+        lblStrength.setText(s.isEmpty() ? "" : LEVEL_TEXT[score]);
+        lblStrength.setStyle("-fx-text-fill: " + LEVEL_COLOR[score] + ";");
+    }
+
     private void handleRegister() {}        // Sẽ triển khai chi tiết ở TODO 7
     private void resetForm() {}             // Sẽ triển khai chi tiết ở TODO 8
 
