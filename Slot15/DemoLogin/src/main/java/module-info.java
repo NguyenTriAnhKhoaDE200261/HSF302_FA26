@@ -9,7 +9,8 @@ module fu.de200261.demologin {
     // Common utilities
     exports com.fu.ch08.common;
 
-    // Chapter 08 - Bài 1 & Bài 2
+    // Chapter 08 - Bài 1, Bài 2 & Bài 3
     exports com.fu.ch08.b1;
     exports com.fu.ch08.b2;
+    exports com.fu.ch08.b3;
 }
