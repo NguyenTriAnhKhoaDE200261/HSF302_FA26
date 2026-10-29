@@ -190,8 +190,18 @@ public class DrinkOrderApp extends Application {
         log("Lỗi: " + msg);
     }
 
+    // TODO 12: Đưa form về trạng thái ban đầu
     private void reset() {
-        // Sẽ triển khai chi tiết ở TODO 12
+        tfName.clear();
+        cbDrink.setValue(null);
+        tgSize.selectToggle(rbM);
+        chkPearl.setSelected(false);
+        chkJelly.setSelected(false);
+        chkLessSugar.setSelected(false);
+        tfQty.setText("1");
+        lblResult.setStyle("");
+        lblResult.setText("Chưa có đơn hàng");
+        tfName.requestFocus();
     }
 
     private void log(String msg) {
