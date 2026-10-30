@@ -4,6 +4,7 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.stage.Stage;
 
 import java.util.Map;
 
@@ -38,8 +39,41 @@ public class LoginController {
         Platform.runLater(tfUsername::requestFocus);
     }
 
+    // TODO 5: Xử lý đăng nhập
     @FXML
-    private void handleLogin(ActionEvent e) {}
+    private void handleLogin(ActionEvent e) {
+        String user = tfUsername.getText().trim().toLowerCase();
+        String pass = pfPassword.getText();
+        String role = cbRole.getValue();
+
+        if (failedCount >= 3) {
+            lblError.setText("Sai quá 3 lần. Vui lòng khởi động lại ứng dụng.");
+            return;
+        }
+        if (!user.matches("[a-z0-9_]{3,20}")) {
+            lblError.setText("Username 3–20 ký tự, chỉ chữ thường/số/_");
+            return;
+        }
+
+        String[] acc = ACCOUNTS.get(user);
+        if (acc == null || !acc[0].equals(pass)) {
+            failedCount++;
+            lblError.setText("Sai username hoặc mật khẩu (còn %d lần)".formatted(3 - failedCount));
+            pfPassword.clear();
+            return;
+        }
+        if (!acc[1].equals(role)) {
+            lblError.setText("Vai trò không đúng với tài khoản");
+            return;
+        }
+
+        lblError.setText("");
+        openWelcome(user, role, (Stage) btnLogin.getScene().getWindow());
+    }
+
+    private void openWelcome(String user, String role, Stage loginStage) {
+        // Sẽ triển khai chi tiết ở TODO 6
+    }
 
     @FXML
     private void handleForgot() {}
